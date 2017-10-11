@@ -24,6 +24,12 @@ HOST_IP = "192.168.0.121"
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
 sock.setsockopt(socket.SOL_IP, socket.IP_MULTICAST_IF, socket.inet_aton(HOST_IP))
 
+
+# allow multiple sockets to use same port number?
+sock.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
+sock.bind(("", 3702))
+
+
 packetdata = open('discovery-probe.xml', "r").read()
 sock.sendto(packetdata, (MCAST_GRP, MCAST_PORT))
 print "SENT PACKET:\n\n" + packetdata
