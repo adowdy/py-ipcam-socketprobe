@@ -32,7 +32,7 @@ print "begin loop!"
 
 while 1:
     try:
-        data, addr = sock.recvfrom(1024)
+        data, addr = sock.recvfrom(4096)
     except socket.error as e:
         pass
     else:
