@@ -2,6 +2,15 @@
 # Adapted from: http://chaos.weblogs.us/archives/164
 
 import socket
+from xml.etree.ElementTree import Element
+
+def find_between( s, first, last ):
+    try:
+        start = s.index( first ) + len( first )
+        end = s.index( last, start )
+        return s[start:end]
+    except ValueError:
+        return ""
 
 ANY = "0.0.0.0" 
 # all hosts group
@@ -38,4 +47,14 @@ while 1:
     else:
         print "From: ", addr
         print "Data: ", data
+        # check data for IP addr, continue with getting RTSP URL
+        identifierIPAddr = data.find('<wsdd:XAddrs>')
+        if identifierIPAddr != -1:
+            print identifierIPAddr
+            urlstring = find_between(data, 'XAddrs>', '</')
+            print "\nIP:\n" + urlstring
+
+        
+       
+            
 print "end"

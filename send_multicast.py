@@ -20,7 +20,7 @@ HOST_IP = "192.168.0.121"
 #sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
 #sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 33)
 
-# SEND FROM HOST_IP ON SUBNET
+# SEND FROM HOST_IP ON SUBNET (192...)
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
 sock.setsockopt(socket.SOL_IP, socket.IP_MULTICAST_IF, socket.inet_aton(HOST_IP))
 
