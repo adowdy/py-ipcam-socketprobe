@@ -10,7 +10,7 @@ xmlns:tt="http://www.onvif.org/ver10/schema">
  <tt:Protocol>UDP</tt:Protocol>
  </Transport>
  </trt:StreamSetup>
- <trt:ProfileToken>Profile1</trt:ProfileToken>
+ <trt:ProfileToken>StreamTokenName</trt:ProfileToken>
  </trt:GetStreamUri>
  </soap:Body>
 </soap:Envelope> 
