@@ -1,22 +1,28 @@
+#!/usr/bin/python3
+
 # probe_for_streams.py
-# full example of sending ONVIF probe out on network, and retrieving RTSP url from media profiles for camera streaming
+# full example of sending ONVIF probe out on network, 
+# and retrieving RTSP url from media profiles for camera streaming
 
 import socket, requests, sys, fcntl, struct
 # had to pip install requests
 # todo -- figure out how to build my own soap header so we don't need requests??
 
 # DEFINES
+
 ANY_ADDR = "0.0.0.0" 
-# all hosts group
-#MCAST_ADDR = '224.0.0.1' 
+
+# group specific to onvif?
 MCAST_ADDR = "239.255.255.250"
+
+# all hosts group
+# MCAST_ADDR = '224.0.0.1'
+
 MCAST_PORT = 3702
 
 HEADERS = {'content-type': 'text/xml'}
 # headers = {'content-type': 'application/soap+xml'}
 
-# GET ONVIF URL/URI FOR SOAP TO BEGIN
-#myOnvifUri="http://192.168.0.123:80/onvif/device_service"
 
 ### FUNCTIONS ###
 
@@ -80,6 +86,24 @@ def getRtspUri(onvifUri, profileName):
     #rtspUris.append(rtspUri)
     return rtspUri
 
+def createMulticastListenerSocket():
+    # Create a UDP socket for multicast listen
+    sockMcast = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+    # Allow multiple sockets to use the same PORT number
+    sockMcast.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
+    # Bind to the port that we know will receive multicast data
+    sockMcast.bind((ANY_ADDR,MCAST_PORT))
+
+    # Tell the kernel that we want to add ourselves to a multicast group
+    # The address for the multicast group is the third param
+    status = sockMcast.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, socket.inet_aton(MCAST_ADDR) + socket.inet_aton(ANY_ADDR))
+
+    # setblocking(0) is equiv to settimeout(0.0) which means we poll the socket.
+    # But this will raise an error if recv() or send() can't immediately find or send data. 
+    sockMcast.setblocking(0.1)
+
+    return sockMcast
+
 def sendProbe():
     print "Sending probe to MCAST " + MCAST_ADDR + " " + str(MCAST_PORT)
     # TRY SENDING STUFF WE NEED
@@ -93,7 +117,13 @@ def sendProbe():
     send_sock.close()
     print "Sent Probe Packet"
 
-### *** PROGRAM EXECUTION BEGINS HERE *** ###
+
+
+
+
+
+
+### *** MAIN PROGRAM EXECUTION BEGINS HERE *** ###
 
 # get arg so we know which net interface to send on
 arg_list = sys.argv
@@ -106,20 +136,7 @@ hostInterface = arg_list[1]
 hostIP = get_ip_address(hostInterface)
 print "Probe data will be sent from my IP at: " + hostIP
 
-# Create a UDP socket for multicast listen
-sockMcast = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
-# Allow multiple sockets to use the same PORT number
-sockMcast.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
-# Bind to the port that we know will receive multicast data
-sockMcast.bind((ANY_ADDR,MCAST_PORT))
-
-# Tell the kernel that we want to add ourselves to a multicast group
-# The address for the multicast group is the third param
-status = sockMcast.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, socket.inet_aton(MCAST_ADDR) + socket.inet_aton(ANY_ADDR))
-
-# setblocking(0) is equiv to settimeout(0.0) which means we poll the socket.
-# But this will raise an error if recv() or send() can't immediately find or send data. 
-sockMcast.setblocking(0.1)
+socketMultiListener = createMulticastListenerSocket()
 
 running = 1
 
@@ -128,7 +145,7 @@ sendProbe()
 
 while running:
     try:
-        data, addr = sockMcast.recvfrom(4096)
+        data, addr = socketMultiListener.recvfrom(4096)
 
     except socket.error as e:
         # show error messages?
@@ -162,6 +179,10 @@ while running:
                     mediaProfiles.append(mediaProfile)
                     print mediaProfile['name']
                     print mediaProfile['rtsp']
+
+                    # FROM HERE, if wanted to do anything with the URIs, there is handy urlparse package
+                    # for instance, get individual url pieces and reorder them, like username,pass which can feed to other stuff
+                    socketMultiListener.close()
                     running = 0 # stop, we're done!
 
                 # data structure holds objects with 2 elements: the media profile name, and the rtsp uri
