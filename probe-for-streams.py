@@ -163,15 +163,14 @@ while running:
            
             if onvifUri != "":
                 print "ONVIF URI:\n" + onvifUri
-                destIP = find_between(onvifUri, '//', ':')
-                #print "IP: " + destIP
-                destPort = find_between(onvifUri, (destIP+":"), "/")
-                #print "PORT: " + destPort
-                intDestPort = int(destPort)
+                # if i need to do URI parsing later, use import urlparse ?
+                #destIP = find_between(onvifUri, '//', ':')
 
+                # get the names of all media profiles
                 myMediaProfileNameList = getMediaProfiles(onvifUri)
                 mediaProfiles = []
 
+                # query each media profile to get its stream URI
                 for mediaProfile in myMediaProfileNameList:
                     rtspUri = getRtspUri(onvifUri,mediaProfile)
                     #print mediaProfile + "\n" + rtspUri
