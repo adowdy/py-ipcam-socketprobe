@@ -1,28 +1,22 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
-# probe_for_streams.py
-# full example of sending ONVIF probe out on network, 
+### probe_for_streams.py ###
+# full example of sending ONVIF probe out on network by specifying the network interface,
 # and retrieving RTSP url from media profiles for camera streaming
 
 import socket, requests, sys, fcntl, struct
 # had to pip install requests
-# todo -- figure out how to build my own soap header so we don't need requests??
+# todo -- figure out how to build my own soap header so we don't need requests pack??
 
 # DEFINES
-
 ANY_ADDR = "0.0.0.0" 
-
 # group specific to onvif?
 MCAST_ADDR = "239.255.255.250"
-
 # all hosts group
 # MCAST_ADDR = '224.0.0.1'
-
 MCAST_PORT = 3702
-
 HEADERS = {'content-type': 'text/xml'}
 # headers = {'content-type': 'application/soap+xml'}
-
 
 ### FUNCTIONS ###
 
