@@ -2,7 +2,6 @@
 # Adapted from: http://chaos.weblogs.us/archives/164
 
 import socket
-from xml.etree.ElementTree import Element
 
 def find_between( s, first, last ):
     try:
