@@ -2,8 +2,8 @@ import socket
 
 # 224.0.0.1 is the all-hosts group. If you ping that group, all multicast capable hosts on the network should answer, 
 # as every multicast capable host must join that group at start-up on all it's multicast capable interfaces.
-MCAST_GRP = '224.0.0.1'
-#MCAST_GRP = '239.255.255.250'
+#MCAST_GRP = '224.0.0.1'
+MCAST_GRP = '239.255.255.250'
 MCAST_PORT = 3702
 HOST_IP = "192.168.0.121"
 
@@ -33,3 +33,8 @@ sock.bind(("", 3702))
 packetdata = open('discovery-probe.xml', "r").read()
 sock.sendto(packetdata, (MCAST_GRP, MCAST_PORT))
 print "SENT PACKET:\n\n" + packetdata
+
+# NOTE - a response here is just an echo on the multicast address
+# recv_data = ''
+# recv_data = sock.recv(4096).decode()
+# print "RESPONSE:\n\n" + (recv_data)

@@ -17,7 +17,7 @@ headers = {'content-type': 'text/xml'}
 body = open('get-profiles.xml', "r").read()
 
 response = requests.post(url,data=body,headers=headers)
-print "response: " + response.content
+#print "response: " + response.content
 
 # FISH OUT MEDIA PROFILE NAMES
 profStr = response.content
@@ -51,3 +51,6 @@ for mProfileName in mediaProfileList:
   getProfileUriReq = baseUriRequest.replace("StreamTokenName", mProfileName)
   uriResponse = requests.post(url,data=getProfileUriReq,headers=headers)
   # with response, get rtsp URL
+  rtspUrl = find_between(uriResponse.content, '<tt:Uri>', '</tt:Uri>')
+  #print uriResponse.content
+  print rtspUrl
