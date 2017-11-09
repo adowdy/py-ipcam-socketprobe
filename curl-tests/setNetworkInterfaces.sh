@@ -4,7 +4,7 @@ curl http://192.168.0.123/onvif/device_service -d @set-network-interface.xml
 
 
 # likely system reboot needed, tell it its ok to boot
-#curl http://192.168.0.123/onvif/device_service -d @system-reboot.xml
+# ./system-reboot.sh
 
 # just test a response
 #curl http://192.168.0.200/onvif/device_service -d @../get-profiles.xml
