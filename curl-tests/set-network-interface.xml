@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<soapenv:Envelope
+ xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope"
+ xmlns:tds="http://www.onvif.org/ver10/device/wsdl"
+ xmlns:tt="http://www.onvif.org/ver10/schema">
+ <soapenv:Body>
+ <tds:SetNetworkInterfaces>
+ <tds:InterfaceToken>eth0</tds:InterfaceToken>
+ <tds:NetworkInterface>
+ <tt:Enabled>true</tt:Enabled>
+ <tt:MTU>1500</tt:MTU>
+ <tt:IPv4>
+ <tt:Enabled>true</tt:Enabled>
+ <tt:Manual>
+ <tt:Address>192.168.0.123</tt:Address>
+ <tt:PrefixLength>24</tt:PrefixLength>
+ </tt:Manual>
+ <tt:DHCP>false</tt:DHCP>
+ </tt:IPv4>
+ </tds:NetworkInterface>
+ </tds:SetNetworkInterfaces>
+ </soapenv:Body>
+</soapenv:Envelope>
