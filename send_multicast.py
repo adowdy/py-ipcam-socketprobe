@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 import socket
 import sys
@@ -40,12 +40,13 @@ MCAST_PORT = 3702
 arg_list = sys.argv
 
 if len(sys.argv) < 2:
-  print "give network interface name as argument!";
-  print  "EXAMPLE: python scriptname.py eth0"; exit()
+  print("give network interface name as argument!")
+  print("EXAMPLE: python scriptname.py eth0")
+  exit()
 
 host_interface = arg_list[1]
 host_ip = get_ip_address(host_interface)
-print host_ip
+print(host_ip)
 
 send_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
 send_sock.setsockopt(socket.SOL_IP, socket.IP_MULTICAST_IF, socket.inet_aton(host_ip))
@@ -58,7 +59,7 @@ send_sock.bind(("", 3702))
 
 packetdata = open('discovery-probe.xml', "r").read()
 send_sock.sendto(packetdata, (MCAST_ADDR, MCAST_PORT))
-print "SENT PACKET:\n\n" + packetdata
+print("SENT PACKET:\n\n" + packetdata)
 
 # NOTE - a response here is just an echo on the multicast address
 # recv_data = ''

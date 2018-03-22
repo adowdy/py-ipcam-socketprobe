@@ -151,7 +151,8 @@ while running:
         # print "Data: ", data
         # check data for IP addr, continue with getting RTSP URL
         print "Got multicast response!"
-        identifierIPAddr = data.find('<wsdd:XAddrs>')
+        # print data
+        identifierIPAddr = data.find('XAddrs>')
         if identifierIPAddr != -1:
             onvifUri = find_between(data, 'XAddrs>', '</')
            
